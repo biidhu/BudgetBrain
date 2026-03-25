@@ -1,0 +1,43 @@
+name: Retrospective (Personal-Finance-Intelligence-System)
+about: Share feedback or lessons learned from a sprint in the Personal-Finance-Intelligence-System
+labels: retrospective
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Retrospective for Personal-Finance-Intelligence-System
+        Please provide your feedback for this sprint in the Personal-Finance-Intelligence-System project.
+
+  - type: textarea
+    id: what_went_well
+    attributes:
+      label: What went well?
+      description: List the things that went well during this sprint.
+      placeholder: |
+        - Clear sprint goals
+        - Good team communication
+    validations:
+      required: true
+
+  - type: textarea
+    id: what_didnt_go_well
+    attributes:
+      label: What didn’t go well?
+      description: List the things that could be improved.
+      placeholder: |
+        - Missed deadlines
+        - Unexpected bugs
+    validations:
+      required: true
+
+  - type: textarea
+    id: action_items
+    attributes:
+      label: Action Items
+      description: What actions will be taken to improve next sprint?
+      placeholder: |
+        - Improve task estimation
+        - Add more testing
+    validations:
+      required: false

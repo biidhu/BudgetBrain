@@ -1,0 +1,43 @@
+name: Weekly Sprint Packet (Personal-Finance-Intelligence-System)
+about: Submit your weekly sprint packet for the Personal-Finance-Intelligence-System
+labels: sprint, weekly
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Weekly Sprint Packet for Personal-Finance-Intelligence-System
+        Please fill out your weekly sprint packet below.
+
+  - type: textarea
+    id: accomplishments
+    attributes:
+      label: Accomplishments
+      description: What did you accomplish this week?
+      placeholder: |
+        - Completed feature X
+        - Fixed bug Y
+    validations:
+      required: true
+
+  - type: textarea
+    id: goals
+    attributes:
+      label: Goals for Next Week
+      description: What are your goals for next week?
+      placeholder: |
+        - Implement feature Z
+        - Improve testing coverage
+    validations:
+      required: true
+
+  - type: textarea
+    id: blockers
+    attributes:
+      label: Blockers / Issues
+      description: Are there any blockers or issues affecting your progress?
+      placeholder: |
+        - Waiting for API access
+        - Dependency on another team
+    validations:
+      required: false

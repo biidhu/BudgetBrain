@@ -1,0 +1,46 @@
+name: Config Change (Personal-Finance-Intelligence-System)
+description: Propose a configuration or settings change for the Personal-Finance-Intelligence-System
+labels: ["config"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Config Change for Personal-Finance-Intelligence-System
+        Please describe the configuration change you are proposing.
+
+  - type: input
+    id: config_area
+    attributes:
+      label: Config Area
+      description: What part of the system does this affect?
+      placeholder: Database, API, Frontend
+    validations:
+      required: true
+
+  - type: textarea
+    id: change
+    attributes:
+      label: Change Description
+      description: What change do you propose?
+      placeholder: Describe the configuration update clearly
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: Reason
+      description: Why is this change needed?
+      placeholder: Explain why this change is necessary
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: What is the expected impact?
+      placeholder: Describe any side effects or improvements
+    validations:
+      required: false

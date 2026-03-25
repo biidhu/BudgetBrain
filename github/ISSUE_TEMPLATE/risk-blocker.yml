@@ -1,0 +1,51 @@
+name: Risk/Blocker (Personal-Finance-Intelligence-System)
+about: Report a risk or blocker for the Personal-Finance-Intelligence-System
+labels: risk, blocker
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Risk/Blocker for Personal-Finance-Intelligence-System
+        Please describe the risk or blocker affecting the Personal-Finance-Intelligence-System project.
+
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: Provide a short summary of the risk or blocker.
+      placeholder: e.g., API integration delay
+    validations:
+      required: true
+
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: Provide detailed information about the risk or blocker.
+      placeholder: |
+        Describe the issue, when it started, and what is causing it.
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: What is the impact on the project or sprint?
+      placeholder: |
+        - Delays in feature delivery
+        - Affects dependent modules
+    validations:
+      required: false
+
+  - type: textarea
+    id: mitigation
+    attributes:
+      label: Mitigation / Resolution Plan
+      description: How can this be resolved or mitigated?
+      placeholder: |
+        - Assign additional resources
+        - Use temporary workaround
+    validations:
+      required: false

@@ -181,10 +181,4 @@ This architecture enables these Sprint 1 tasks:
 3. **Useful**: Every team member knows what to build
 4. **Scoped**: Future features (AI, advisors, banks) are labeled as Future
 
----
 
-## Next Steps
-1. Share this diagram with the team
-2. Use it to break down Sprint 1 issues
-3. Revisit after Sprint 1 to add new layers (AI service, bank APIs)
-4. Update this doc as architecture evolves

@@ -15,12 +15,35 @@
     <input type="password" id="password" placeholder="Password">
 
     <button onclick="login()">Login</button>
+    <button onclick="register()">Register</button>
 
     <p id="message"></p>
   </div>
 </div>
 
 <script>
+
+// ✅ ADD THIS FUNCTION HERE
+async function register() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const res = await fetch("http://localhost:5000/register", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ email, password })
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    alert("Registered ✅ Now login");
+  } else {
+    alert("User already exists ❌");
+  }
+}
+
+// ✅ Your existing login function
 async function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -42,6 +65,7 @@ async function login() {
     document.getElementById("message").innerText = "Login Failed ❌";
   }
 }
+
 </script>
 
 </body>

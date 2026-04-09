@@ -17,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/CapstoneDesign-Spring2026-UlsanCollege/BudgetBrain/issues"
   },
-  "homepage": "https://github.com/CapstoneDesign-Spring2026-UlsanCollege/BudgetBrain#readme"
+  "homepage": "https://github.com/CapstoneDesign-Spring2026-UlsanCollege/BudgetBrain#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "mysql": "^2.18.1"
+  }
 }

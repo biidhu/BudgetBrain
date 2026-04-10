@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - BudgetBrain</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="profile-page">
+    <div class="topbar">
+      <h2>Profile</h2>
+      <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="settings.html">Settings</a>
+        <button onclick="logout()">Logout</button>
+      </div>
+    </div>
+
+    <div class="profile-box">
+      <img id="profileAvatar" class="avatar-preview" src="" alt="Avatar">
+
+      <p class="info-text"><strong>Username:</strong> <span id="profileUsername"></span></p>
+      <p class="info-text"><strong>Email:</strong> <span id="profileEmail"></span></p>
+      <p class="info-text"><strong>Theme:</strong> <span id="profileTheme"></span></p>
+      <p class="info-text"><strong>Joined:</strong> <span id="profileCreated"></span></p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

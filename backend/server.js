@@ -9,21 +9,18 @@ const app = express();
 const PORT = 5000;
 const SECRET_KEY = "budgetbrain_secret_key";
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Serve frontend
 const frontendPath = path.join(__dirname, "../frontend");
 app.use(express.static(frontendPath));
 
-// MySQL connection
 const db = mysql.createConnection({
   host: "localhost",
   user: "bbuser",
   password: "1234",
   database: "budgetbrain",
-  port: 3307
+  port: 3306
 });
 
 db.connect((err) => {
@@ -36,7 +33,6 @@ db.connect((err) => {
   }
 });
 
-// JWT middleware
 function verifyToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
@@ -61,7 +57,6 @@ function verifyToken(req, res, next) {
   });
 }
 
-// Test route
 app.get("/test", (req, res) => {
   res.json({
     success: true,
@@ -69,12 +64,10 @@ app.get("/test", (req, res) => {
   });
 });
 
-// Home route
 app.get("/", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
 
-// Register
 app.post("/register", async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -133,7 +126,6 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// Login
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
 
@@ -196,7 +188,6 @@ app.post("/login", (req, res) => {
   });
 });
 
-// Get profile
 app.get("/profile/:id", verifyToken, (req, res) => {
   const userId = req.params.id;
 
@@ -227,7 +218,6 @@ app.get("/profile/:id", verifyToken, (req, res) => {
   );
 });
 
-// Update settings
 app.put("/settings/:id", verifyToken, (req, res) => {
   const userId = req.params.id;
   const { username, avatar, theme } = req.body;
@@ -242,7 +232,7 @@ app.put("/settings/:id", verifyToken, (req, res) => {
   db.query(
     "UPDATE users SET username = ?, avatar = ?, theme = ? WHERE id = ?",
     [username, avatar, theme, userId],
-    (err, result) => {
+    (err) => {
       if (err) {
         return res.status(500).json({
           success: false,
@@ -259,7 +249,69 @@ app.put("/settings/:id", verifyToken, (req, res) => {
   );
 });
 
-// DB check
+app.get("/dashboard/:id", verifyToken, (req, res) => {
+  const userId = req.params.id;
+
+  const totalBalanceQuery = `
+    SELECT 
+      COALESCE(SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END), 0) -
+      COALESCE(SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END), 0)
+      AS totalBalance
+    FROM transactions
+    WHERE user_id = ?
+  `;
+
+  const totalExpensesQuery = `
+    SELECT COALESCE(SUM(amount), 0) AS totalExpenses
+    FROM transactions
+    WHERE user_id = ? AND type = 'expense'
+  `;
+
+  const categoryQuery = `
+    SELECT category, SUM(amount) AS total
+    FROM transactions
+    WHERE user_id = ? AND type = 'expense'
+    GROUP BY category
+  `;
+
+  db.query(totalBalanceQuery, [userId], (err, balanceResult) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: "Error loading balance",
+        error: err.message
+      });
+    }
+
+    db.query(totalExpensesQuery, [userId], (err2, expenseResult) => {
+      if (err2) {
+        return res.status(500).json({
+          success: false,
+          message: "Error loading expenses",
+          error: err2.message
+        });
+      }
+
+      db.query(categoryQuery, [userId], (err3, categoryResult) => {
+        if (err3) {
+          return res.status(500).json({
+            success: false,
+            message: "Error loading categories",
+            error: err3.message
+          });
+        }
+
+        return res.json({
+          success: true,
+          totalBalance: balanceResult[0].totalBalance,
+          totalExpenses: expenseResult[0].totalExpenses,
+          categories: categoryResult
+        });
+      });
+    });
+  });
+});
+
 app.get("/db-check", (req, res) => {
   db.query("SHOW TABLES", (err, tables) => {
     if (err) {
@@ -277,12 +329,10 @@ app.get("/db-check", (req, res) => {
   });
 });
 
-// Fallback
 app.get("*", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT} 🚀`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on http://127.0.0.1:${PORT} 🚀`);
 });

@@ -5,18 +5,83 @@ if (!token) {
   window.location.href = "index.html";
 }
 
-// Logout
 function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
   window.location.href = "index.html";
 }
 
-// -------------------- DASHBOARD --------------------
-const usernameEl = document.getElementById("username");
+// -------------------- DASHBOARD USER --------------------
+async function loadDashboardUser() {
+  const usernameEl = document.getElementById("username");
+  const dashboardAvatar = document.getElementById("dashboardAvatar");
 
-if (usernameEl && user) {
-  usernameEl.innerText = user.username || "User";
+  if (!usernameEl || !dashboardAvatar || !user) return;
+
+  try {
+    const res = await fetch(`http://127.0.0.1:5000/profile/${user.id}`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      user = data.user;
+      localStorage.setItem("user", JSON.stringify(user));
+
+      usernameEl.innerText = user.username || "User";
+      dashboardAvatar.src = user.avatar || "https://i.pravatar.cc/150?img=12";
+    } else {
+      console.log("DASHBOARD USER LOAD FAILED:", data.message);
+    }
+  } catch (error) {
+    console.log("DASHBOARD USER ERROR:", error);
+  }
+}
+
+// -------------------- DASHBOARD DATA --------------------
+async function loadDashboardData() {
+  const totalBalanceEl = document.getElementById("totalBalance");
+  const totalExpensesEl = document.getElementById("totalExpenses");
+  const categoryChart = document.getElementById("categoryChart");
+
+  if (!user || !totalBalanceEl || !totalExpensesEl) return;
+
+  try {
+    const res = await fetch(`http://127.0.0.1:5000/dashboard/${user.id}`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      totalBalanceEl.innerText = `$${Number(data.totalBalance).toFixed(2)}`;
+      totalExpensesEl.innerText = `$${Number(data.totalExpenses).toFixed(2)}`;
+
+      if (categoryChart) {
+        new Chart(categoryChart, {
+          type: "doughnut",
+          data: {
+            labels: data.categories.map((item) => item.category),
+            datasets: [{
+              data: data.categories.map((item) => Number(item.total)),
+              backgroundColor: ["#7c5cff", "#ff4d6d", "#00d4ff", "#00ff88", "#ffaa00"]
+            }]
+          }
+        });
+      }
+    } else {
+      console.log("DASHBOARD DATA LOAD FAILED:", data.message);
+    }
+  } catch (error) {
+    console.log("DASHBOARD DATA ERROR:", error);
+  }
 }
 
 // -------------------- PROFILE --------------------
@@ -30,7 +95,7 @@ async function loadProfile() {
   if (!profileAvatar || !user) return;
 
   try {
-    const res = await fetch(`/profile/${user.id}`, {
+    const res = await fetch(`http://127.0.0.1:5000/profile/${user.id}`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`
@@ -58,8 +123,6 @@ async function loadProfile() {
     console.log("PROFILE ERROR:", error);
   }
 }
-
-loadProfile();
 
 // -------------------- SETTINGS --------------------
 const settingsAvatarPreview = document.getElementById("settingsAvatarPreview");
@@ -109,7 +172,7 @@ async function saveSettings() {
     : user.theme;
 
   try {
-    const res = await fetch(`/settings/${user.id}`, {
+    const res = await fetch(`http://127.0.0.1:5000/settings/${user.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -153,3 +216,83 @@ async function saveSettings() {
     }
   }
 }
+
+// -------------------- EXTRA CHARTS --------------------
+window.addEventListener("load", () => {
+  loadDashboardUser();
+  loadDashboardData();
+  loadProfile();
+
+  const balanceChart = document.getElementById("balanceChart");
+  const expenseChart = document.getElementById("expenseChart");
+  const lineChart = document.getElementById("lineChart");
+  const donutChart = document.getElementById("donutChart");
+
+  if (balanceChart) {
+    new Chart(balanceChart, {
+      type: "line",
+      data: {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+        datasets: [{
+          data: [30, 50, 40, 60, 80],
+          borderColor: "#7c5cff",
+          fill: false
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+
+  if (expenseChart) {
+    new Chart(expenseChart, {
+      type: "line",
+      data: {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+        datasets: [{
+          data: [20, 40, 30, 50, 70],
+          borderColor: "#ff4d6d",
+          fill: false
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+
+  if (lineChart) {
+    new Chart(lineChart, {
+      type: "line",
+      data: {
+        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        datasets: [
+          {
+            label: "Income",
+            data: [500, 700, 600, 800, 900, 750, 950],
+            borderColor: "#7c5cff"
+          },
+          {
+            label: "Expense",
+            data: [400, 500, 450, 600, 650, 700, 800],
+            borderColor: "#ff4d6d"
+          }
+        ]
+      }
+    });
+  }
+
+  if (donutChart) {
+    new Chart(donutChart, {
+      type: "doughnut",
+      data: {
+        labels: ["Food", "House", "Car", "Shopping"],
+        datasets: [{
+          data: [35, 25, 20, 20],
+          backgroundColor: ["#7c5cff", "#00d4ff", "#ff4d6d", "#00ff88"]
+        }]
+      }
+    });
+  }
+});

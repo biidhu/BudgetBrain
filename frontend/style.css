@@ -7,60 +7,47 @@
 
 body {
   min-height: 100vh;
-  background: url(https://images.openai.com/static-rsc-4/3ulqeVDniaXfBSI_pBFBpr_p44j7GafH47eqjtRKQETaMVNiENAsCRn6lUk0UTIpmZDDzwG1nJtUqPWDx8FLZ5Oez-QsbFe-jf53U5CYZnjRErUKjYM4TrQMrFPXvtLTetlZCkLa3vR-1xCCoE5nMABNR-dN04zNgzsaIjF9ogID4j7JYUQw79epVmxYYMcH?purpose=fullsize) no-repeat center center/cover;
-  position: relative;
+  background: #0f1117;
   color: white;
 }
 
-body::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-}
-
+/* -------------------- LOGIN / REGISTER -------------------- */
 .container {
-  position: relative;
-  z-index: 1;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
 
 .card {
-  width: 340px;
-  padding: 35px 28px;
-  border-radius: 14px;
-  background: rgba(20, 25, 40, 0.48);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
-  color: white;
+  width: 100%;
+  max-width: 400px;
+  background: #1a2030;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
 }
 
 .card h1 {
   text-align: center;
-  font-size: 28px;
   margin-bottom: 25px;
+  font-size: 28px;
 }
 
-.card input,
-.card select {
+.card input {
   width: 100%;
-  background: transparent;
+  padding: 12px 14px;
+  margin-bottom: 15px;
   border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.75);
-  outline: none;
+  border-radius: 10px;
+  background: #111827;
   color: white;
-  padding: 10px 0;
-  margin-bottom: 18px;
-  font-size: 14px;
+  outline: none;
 }
 
 .card input::placeholder {
-  color: rgba(255, 255, 255, 0.75);
+  color: #9ca3af;
 }
 
 .options {
@@ -68,185 +55,284 @@ body::before {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 18px;
-  font-size: 12px;
+  font-size: 14px;
 }
 
-.options label {
+.remember {
   display: flex;
-  gap: 5px;
   align-items: center;
+  gap: 8px;
+  color: #d1d5db;
+}
+
+.remember input {
+  width: auto;
+  margin: 0;
 }
 
 .options a,
 .register-text a,
-.link-btn {
-  color: white;
+p a,
+.nav-links a {
+  color: #60a5fa;
   text-decoration: none;
 }
 
 .options a:hover,
 .register-text a:hover,
-.link-btn:hover {
+p a:hover,
+.nav-links a:hover {
   text-decoration: underline;
 }
 
 .login-btn,
-.action-btn {
+.action-btn,
+.logout-btn,
+.nav-links button,
+.card button {
   width: 100%;
-  padding: 11px;
-  background: white;
-  color: black;
+  padding: 12px;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
+  background: #7c5cff;
+  color: white;
+  font-size: 15px;
   cursor: pointer;
-  font-size: 14px;
-  margin-bottom: 14px;
-  font-weight: bold;
+  transition: 0.2s ease;
 }
 
 .login-btn:hover,
-.action-btn:hover {
-  background: #e8e8e8;
+.action-btn:hover,
+.logout-btn:hover,
+.nav-links button:hover,
+.card button:hover {
+  opacity: 0.9;
 }
 
-.register-text,
-#message {
+.register-text {
   text-align: center;
-  font-size: 13px;
+  margin-top: 18px;
+  font-size: 14px;
+  color: #d1d5db;
 }
 
 #message {
-  color: #ffd2d2;
-  margin-top: 8px;
+  margin-top: 14px;
+  text-align: center;
+  font-size: 14px;
+  min-height: 20px;
+  color: #f8fafc;
 }
 
-.dashboard-page,
-.profile-page,
-.settings-page {
-  position: relative;
-  z-index: 1;
-  padding: 30px;
+/* -------------------- DASHBOARD -------------------- */
+.sidebar {
+  width: 220px;
+  background: #151a23;
+  height: 100vh;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.logo {
+  color: #7c5cff;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+.sidebar a {
+  display: block;
+  padding: 12px;
+  margin: 6px 0;
+  color: #aaa;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: 0.2s ease;
+}
+
+.sidebar a.active,
+.sidebar a:hover {
+  background: #7c5cff;
+  color: white;
+}
+
+.logout-btn {
+  margin-top: 20px;
+  background: #ff4d6d;
+}
+
+.main {
+  margin-left: 240px;
+  padding: 20px;
 }
 
 .topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-  background: rgba(20, 25, 40, 0.48);
-  padding: 18px 24px;
-  border-radius: 14px;
-  backdrop-filter: blur(8px);
+  gap: 20px;
 }
 
-.topbar h2 {
-  font-size: 24px;
-}
-
-.topbar .nav-links {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.topbar .nav-links a,
-.topbar .nav-links button {
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: white;
+.topbar input {
   padding: 10px 14px;
+  border: none;
   border-radius: 8px;
-  cursor: pointer;
-  text-decoration: none;
+  background: #1c2230;
+  color: white;
+  outline: none;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.top-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #7c5cff;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.card,
+.panel,
+.profile-box {
+  background: #1a2030;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.card h3,
+.panel h3 {
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+  grid-template-columns: 2fr 1fr;
+  gap: 15px;
+  margin-top: 20px;
 }
 
-.panel {
-  background: rgba(20, 25, 40, 0.48);
-  padding: 22px;
-  border-radius: 14px;
-  backdrop-filter: blur(8px);
+/* -------------------- PROFILE / SETTINGS -------------------- */
+.profile-page,
+.settings-page {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-links button {
+  width: auto;
+  padding: 10px 14px;
+  background: #ff4d6d;
 }
 
 .profile-box {
   max-width: 500px;
-  margin: 0 auto;
-  background: rgba(20, 25, 40, 0.48);
-  padding: 28px;
-  border-radius: 14px;
-  backdrop-filter: blur(8px);
+  margin: 30px auto;
+  text-align: center;
 }
 
 .avatar-preview {
-  width: 110px;
-  height: 110px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  display: block;
-  margin: 0 auto 18px;
-  border: 3px solid rgba(255,255,255,0.35);
+  margin-bottom: 20px;
+  border: 3px solid #7c5cff;
 }
 
 .info-text {
-  margin-bottom: 15px;
-  font-size: 15px;
+  margin: 12px 0;
+  color: #d1d5db;
+  font-size: 16px;
 }
 
-.light-theme::before {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.light-theme .panel,
-.light-theme .topbar,
-.light-theme .profile-box,
-.light-theme .card {
-  background: rgba(255, 255, 255, 0.35);
-  color: #111;
-}
-
-.light-theme input,
-.light-theme select {
-  color: #111;
-  border-bottom: 1px solid rgba(0,0,0,0.45);
-}
-
-.light-theme input::placeholder {
-  color: rgba(0,0,0,0.6);
-}
-
-.light-theme .register-text a,
-.light-theme .options a,
-.light-theme .link-btn,
-.light-theme .topbar .nav-links a,
-.light-theme .topbar .nav-links button {
-  color: #111;
-}
-.options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.profile-box input,
+.profile-box select {
+  width: 100%;
+  padding: 12px 14px;
   margin: 10px 0;
-}
-
-.remember {
-  display: flex;
-  align-items: center;
-  gap: 6px; /* space between checkbox and text */
-  font-size: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #111827;
   color: white;
+  outline: none;
 }
 
-.remember input {
+.profile-box select {
   cursor: pointer;
+}
+
+.profile-box .action-btn {
+  margin-top: 10px;
+}
+
+/* -------------------- RESPONSIVE -------------------- */
+@media (max-width: 900px) {
+  .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+  }
+
+  .main {
+    margin-left: 0;
+  }
+
+  .cards,
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 500px) {
+  .card,
+  .panel,
+  .profile-box {
+    padding: 16px;
+  }
+
+  .card h1 {
+    font-size: 24px;
+  }
+
+  .topbar-left h2 {
+    font-size: 20px;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+  }
 }

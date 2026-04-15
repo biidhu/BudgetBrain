@@ -9,31 +9,34 @@ const app = express();
 const PORT = 5000;
 const SECRET_KEY = "budgetbrain_secret_key";
 
-console.log("BUDGETBRAIN SERVER FILE LOADED");
-
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Serve frontend folder
-app.use(express.static(path.join(__dirname, "../frontend")));
+// Serve frontend
+const frontendPath = path.join(__dirname, "../frontend");
+app.use(express.static(frontendPath));
 
 // MySQL connection
 const db = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "", // change if your MySQL has password
-  database: "budgetbrain"
+  user: "bbuser",
+  password: "1234",
+  database: "budgetbrain",
+  port: 3307
 });
 
 db.connect((err) => {
   if (err) {
-    console.log("Database connection failed:", err.message);
+    console.log("Database connection failed ❌");
+    console.log("Error code:", err.code);
+    console.log("Error message:", err.message);
   } else {
     console.log("MySQL Connected ✅");
   }
 });
 
-// JWT verify middleware
+// JWT middleware
 function verifyToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
@@ -58,11 +61,21 @@ function verifyToken(req, res, next) {
   });
 }
 
+// Test route
+app.get("/test", (req, res) => {
+  res.json({
+    success: true,
+    message: "Backend works"
+  });
+});
+
+// Home route
+app.get("/", (req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
+});
+
 // Register
 app.post("/register", async (req, res) => {
-  console.log("===== REGISTER HIT =====");
-  console.log("Body:", req.body);
-
   try {
     const { username, email, password } = req.body;
 
@@ -73,10 +86,8 @@ app.post("/register", async (req, res) => {
       });
     }
 
-    const checkSql = "SELECT * FROM users WHERE email = ?";
-    db.query(checkSql, [email], async (err, result) => {
+    db.query("SELECT * FROM users WHERE email = ?", [email], async (err, result) => {
       if (err) {
-        console.log("CHECK ERROR:", err.message);
         return res.status(500).json({
           success: false,
           message: "Database check error",
@@ -93,32 +104,27 @@ app.post("/register", async (req, res) => {
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      const insertSql =
-        "INSERT INTO users (username, email, password, avatar, theme) VALUES (?, ?, ?, ?, ?)";
-
       db.query(
-        insertSql,
+        "INSERT INTO users (username, email, password, avatar, theme) VALUES (?, ?, ?, ?, ?)",
         [username, email, hashedPassword, "https://i.pravatar.cc/150?img=12", "dark"],
-        (err, result) => {
-          if (err) {
-            console.log("INSERT ERROR:", err.message);
+        (insertErr, insertResult) => {
+          if (insertErr) {
             return res.status(500).json({
               success: false,
               message: "Registration failed",
-              error: err.message
+              error: insertErr.message
             });
           }
 
-          console.log("User inserted successfully:", result.insertId);
           return res.json({
             success: true,
-            message: "Registered successfully"
+            message: "Registered successfully",
+            userId: insertResult.insertId
           });
         }
       );
     });
   } catch (error) {
-    console.log("SERVER ERROR:", error.message);
     return res.status(500).json({
       success: false,
       message: "Server error",
@@ -129,9 +135,6 @@ app.post("/register", async (req, res) => {
 
 // Login
 app.post("/login", (req, res) => {
-  console.log("===== LOGIN HIT =====");
-  console.log("Body:", req.body);
-
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -141,10 +144,8 @@ app.post("/login", (req, res) => {
     });
   }
 
-  const sql = "SELECT * FROM users WHERE email = ?";
-  db.query(sql, [email], async (err, result) => {
+  db.query("SELECT * FROM users WHERE email = ?", [email], async (err, result) => {
     if (err) {
-      console.log("LOGIN DB ERROR:", err.message);
       return res.status(500).json({
         success: false,
         message: "Database error",
@@ -170,106 +171,95 @@ app.post("/login", (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      {
+        id: user.id,
+        email: user.email,
+        username: user.username
+      },
       SECRET_KEY,
       { expiresIn: "1d" }
     );
 
-    console.log("Login success:", user.email);
-
     return res.json({
       success: true,
+      message: "Login successful",
       token,
       user: {
         id: user.id,
         username: user.username,
         email: user.email,
         avatar: user.avatar,
-        theme: user.theme
+        theme: user.theme,
+        created_at: user.created_at
       }
     });
   });
 });
 
 // Get profile
-app.get("/profile", verifyToken, (req, res) => {
-  const sql =
-    "SELECT id, username, email, avatar, theme, created_at FROM users WHERE id = ?";
+app.get("/profile/:id", verifyToken, (req, res) => {
+  const userId = req.params.id;
 
-  db.query(sql, [req.user.id], (err, result) => {
-    if (err) {
-      console.log("PROFILE DB ERROR:", err.message);
-      return res.status(500).json({
-        success: false,
-        message: "Database error",
-        error: err.message
+  db.query(
+    "SELECT id, username, email, avatar, theme, created_at FROM users WHERE id = ?",
+    [userId],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Database error",
+          error: err.message
+        });
+      }
+
+      if (result.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found"
+        });
+      }
+
+      return res.json({
+        success: true,
+        user: result[0]
       });
     }
-
-    if (result.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found"
-      });
-    }
-
-    return res.json({
-      success: true,
-      user: result[0]
-    });
-  });
+  );
 });
 
-// Update profile/settings
-app.put("/profile", verifyToken, (req, res) => {
+// Update settings
+app.put("/settings/:id", verifyToken, (req, res) => {
+  const userId = req.params.id;
   const { username, avatar, theme } = req.body;
 
-  if (!username || !theme) {
+  if (!username || !avatar || !theme) {
     return res.status(400).json({
       success: false,
-      message: "Username and theme are required"
+      message: "Username, avatar, and theme are required"
     });
   }
 
-  const finalAvatar =
-    avatar && avatar.trim() !== ""
-      ? avatar
-      : "https://i.pravatar.cc/150?img=12";
+  db.query(
+    "UPDATE users SET username = ?, avatar = ?, theme = ? WHERE id = ?",
+    [username, avatar, theme, userId],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Failed to update settings",
+          error: err.message
+        });
+      }
 
-  const sql =
-    "UPDATE users SET username = ?, avatar = ?, theme = ? WHERE id = ?";
-
-  db.query(sql, [username, finalAvatar, theme, req.user.id], (err, result) => {
-    if (err) {
-      console.log("UPDATE ERROR:", err.message);
-      return res.status(500).json({
-        success: false,
-        message: "Update failed",
-        error: err.message
+      return res.json({
+        success: true,
+        message: "Settings updated successfully"
       });
     }
-
-    return res.json({
-      success: true,
-      message: "Profile updated"
-    });
-  });
+  );
 });
 
-// Home route
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend", "index.html"));
-});
-
-// Test route
-app.get("/test", (req, res) => {
-  res.json({
-    success: true,
-    message: "Backend works"
-  });
-});
-
-// DB check route
+// DB check
 app.get("/db-check", (req, res) => {
   db.query("SHOW TABLES", (err, tables) => {
     if (err) {
@@ -280,26 +270,19 @@ app.get("/db-check", (req, res) => {
       });
     }
 
-    db.query("DESCRIBE users", (err2, structure) => {
-      if (err2) {
-        return res.status(500).json({
-          success: false,
-          message: "users table not found or invalid",
-          error: err2.message,
-          tables
-        });
-      }
-
-      return res.json({
-        success: true,
-        message: "Database is okay",
-        tables,
-        users_structure: structure
-      });
+    return res.json({
+      success: true,
+      tables
     });
   });
 });
 
+// Fallback
+app.get("*", (req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
+});
+
+// Start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT} 🚀`);
 });

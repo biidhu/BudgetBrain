@@ -1,0 +1,22 @@
+CREATE DATABASE IF NOT EXISTS budgetbrain;
+USE budgetbrain;
+
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(100) NOT NULL,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  avatar VARCHAR(255) DEFAULT 'https://i.pravatar.cc/150?img=12',
+  theme VARCHAR(50) DEFAULT 'dark',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE USER IF NOT EXISTS 'bbuser'@'localhost' IDENTIFIED BY '1234';
+GRANT ALL PRIVILEGES ON budgetbrain.* TO 'bbuser'@'localhost';
+FLUSH PRIVILEGES;
+USE budgetbrain;
+SHOW TABLES;
+DESCRIBE users;
+SELECT * FROM users;

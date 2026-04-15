@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BudgetBrain Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="logo">BudgetBrain</div>
+
+    <a href="dashboard.html" class="active">Dashboard</a>
+    <a href="profile.html">Profile</a>
+    <a href="settings.html">Settings</a>
+
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <h2>Hello, <span id="username">User</span> 👋</h2>
+      <input type="text" placeholder="Search...">
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Total Balance</h3>
+        <p>$857,850</p>
+        <canvas id="balanceChart"></canvas>
+      </div>
+
+      <div class="card">
+        <h3>Total Expenses</h3>
+        <p>$198,110</p>
+        <canvas id="expenseChart"></canvas>
+      </div>
+
+      <div class="card">
+        <h3>Categories</h3>
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <h3>Income vs Expenses</h3>
+        <canvas id="lineChart"></canvas>
+      </div>
+
+      <div class="panel">
+        <h3>Spending Breakdown</h3>
+        <canvas id="donutChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      window.location.href = "index.html";
+    }
+
+    if (user) {
+      document.getElementById("username").innerText = user.username || "User";
+    }
+
+    function logout() {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "index.html";
+    }
+
+    new Chart(document.getElementById("balanceChart"), {
+      type: "line",
+      data: {
+        labels: ["Jan","Feb","Mar","Apr","May"],
+        datasets: [{
+          data: [30,50,40,60,80],
+          borderColor: "#7c5cff",
+          fill: false
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    new Chart(document.getElementById("expenseChart"), {
+      type: "line",
+      data: {
+        labels: ["Jan","Feb","Mar","Apr","May"],
+        datasets: [{
+          data: [20,40,30,50,70],
+          borderColor: "#ff4d6d",
+          fill: false
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    new Chart(document.getElementById("categoryChart"), {
+      type: "doughnut",
+      data: {
+        labels: ["Food","Rent","Travel","Other"],
+        datasets: [{
+          data: [30,25,20,25],
+          backgroundColor: ["#7c5cff","#ff4d6d","#00d4ff","#00ff88"]
+        }]
+      }
+    });
+
+    new Chart(document.getElementById("lineChart"), {
+      type: "line",
+      data: {
+        labels: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+        datasets: [
+          {
+            label: "Income",
+            data: [500,700,600,800,900,750,950],
+            borderColor: "#7c5cff"
+          },
+          {
+            label: "Expense",
+            data: [400,500,450,600,650,700,800],
+            borderColor: "#ff4d6d"
+          }
+        ]
+      }
+    });
+
+    new Chart(document.getElementById("donutChart"), {
+      type: "doughnut",
+      data: {
+        labels: ["Food","House","Car","Shopping"],
+        datasets: [{
+          data: [35,25,20,20],
+          backgroundColor: ["#7c5cff","#00d4ff","#ff4d6d","#00ff88"]
+        }]
+      }
+    });
+  </script>
+
+</body>
+</html>

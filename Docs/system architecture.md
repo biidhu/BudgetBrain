@@ -181,8 +181,3 @@ This architecture enables these Sprint 1 tasks:
 3. **Useful**: Every team member knows what to build
 4. **Scoped**: Future features (AI, advisors, banks) are labeled as Future
 
-<<<<<<< HEAD
-
-=======
----
->>>>>>> 584d703 (itr)

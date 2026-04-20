@@ -1,29 +1,28 @@
 {
   "name": "budgetbrain",
   "version": "1.0.0",
-  "description": "For smart finance management",
+  "description": "Smart finance management application",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "cd server && npm start",
+    "dev": "cd server && npm run dev",
+    "install:server": "cd server && npm install",
+    "test": "echo \"No tests specified\" && exit 0"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CapstoneDesign-Spring2026-UlsanCollege/BudgetBrain.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
+  "keywords": [
+    "finance",
+    "budget",
+    "personal-finance",
+    "expense-tracker"
+  ],
+  "author": "BudgetBrain Team",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/CapstoneDesign-Spring2026-UlsanCollege/BudgetBrain/issues"
   },
-  "homepage": "https://github.com/CapstoneDesign-Spring2026-UlsanCollege/BudgetBrain#readme",
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "cors": "^2.8.6",
-    "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3",
-    "mysql": "^2.18.1",
-    "mysql2": "^3.22.0"
-  }
+  "homepage": "https://github.com/CapstoneDesign-Spring2026-UlsanCollege/BudgetBrain#readme"
 }

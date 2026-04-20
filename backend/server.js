@@ -312,6 +312,116 @@ app.get("/dashboard/:id", verifyToken, (req, res) => {
   });
 });
 
+app.get("/transactions", verifyToken, (req, res) => {
+  const userId = req.user.id;
+  
+  db.query(
+    "SELECT * FROM transactions WHERE user_id = ? ORDER BY date DESC",
+    [userId],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Error fetching transactions",
+          error: err.message
+        });
+      }
+      
+      return res.json({
+        success: true,
+        transactions: result
+      });
+    }
+  );
+});
+
+app.post("/transactions", verifyToken, (req, res) => {
+  const userId = req.user.id;
+  const { type, amount, category, description, date } = req.body;
+  
+  if (!type || !amount || !category || !date) {
+    return res.status(400).json({
+      success: false,
+      message: "Type, amount, category, and date are required"
+    });
+  }
+  
+  db.query(
+    "INSERT INTO transactions (user_id, type, amount, category, description, date) VALUES (?, ?, ?, ?, ?, ?)",
+    [userId, type, amount, category, description || null, date],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Error creating transaction",
+          error: err.message
+        });
+      }
+      
+      return res.json({
+        success: true,
+        message: "Transaction created",
+        transactionId: result.insertId
+      });
+    }
+  );
+});
+
+app.get("/budgets", verifyToken, (req, res) => {
+  const userId = req.user.id;
+  
+  db.query(
+    "SELECT * FROM budgets WHERE user_id = ?",
+    [userId],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Error fetching budgets",
+          error: err.message
+        });
+      }
+      
+      return res.json({
+        success: true,
+        budgets: result
+      });
+    }
+  );
+});
+
+app.post("/budgets", verifyToken, (req, res) => {
+  const userId = req.user.id;
+  const { category, amount, month } = req.body;
+  
+  if (!category || !amount || !month) {
+    return res.status(400).json({
+      success: false,
+      message: "Category, amount, and month are required"
+    });
+  }
+  
+  db.query(
+    "INSERT INTO budgets (user_id, category, amount, month) VALUES (?, ?, ?, ?)",
+    [userId, category, amount, month],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Error creating budget",
+          error: err.message
+        });
+      }
+      
+      return res.json({
+        success: true,
+        message: "Budget created",
+        budgetId: result.insertId
+      });
+    }
+  );
+});
+
 app.get("/db-check", (req, res) => {
   db.query("SHOW TABLES", (err, tables) => {
     if (err) {

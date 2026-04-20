@@ -296,3 +296,120 @@ window.addEventListener("load", () => {
     });
   }
 });
+
+// -------------------- TRANSACTIONS --------------------
+async function loadTransactions() {
+  const token = localStorage.getItem("token");
+  const tbody = document.getElementById("transactionTableBody");
+  
+  if (!tbody) return;
+  
+  try {
+    const res = await fetch("http://127.0.0.1:5000/transactions", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    
+    const data = await res.json();
+    
+    if (data.success && data.transactions) {
+      tbody.innerHTML = data.transactions.map(t => `
+        <tr>
+          <td>${t.date}</td>
+          <td>${t.type}</td>
+          <td>$${t.amount}</td>
+          <td>${t.category}</td>
+          <td>${t.description || '-'}</td>
+        </tr>
+      `).join("");
+    }
+  } catch (error) {
+    console.log("LOAD TRANSACTIONS ERROR:", error);
+  }
+}
+
+async function addTransaction(type, amount, category, description, date) {
+  const token = localStorage.getItem("token");
+  
+  try {
+    const res = await fetch("http://127.0.0.1:5000/transactions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ type, amount, category, description, date })
+    });
+    
+    const data = await res.json();
+    
+    if (data.success) {
+      loadTransactions();
+      loadDashboardData();
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.log("ADD TRANSACTION ERROR:", error);
+    return false;
+  }
+}
+
+// -------------------- BUDGETS --------------------
+async function loadBudgets() {
+  const token = localStorage.getItem("token");
+  const budgetList = document.getElementById("budgetList");
+  
+  if (!budgetList) return;
+  
+  try {
+    const res = await fetch("http://127.0.0.1:5000/budgets", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    
+    const data = await res.json();
+    
+    if (data.success && data.budgets) {
+      budgetList.innerHTML = data.budgets.map(b => `
+        <div class="budget-item">
+          <span>${b.category}</span>
+          <span>$${b.amount}</span>
+          <span>${b.month}</span>
+        </div>
+      `).join("");
+    }
+  } catch (error) {
+    console.log("LOAD BUDGETS ERROR:", error);
+  }
+}
+
+async function addBudget(category, amount, month) {
+  const token = localStorage.getItem("token");
+  
+  try {
+    const res = await fetch("http://127.0.0.1:5000/budgets", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ category, amount, month })
+    });
+    
+    const data = await res.json();
+    
+    if (data.success) {
+      loadBudgets();
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.log("ADD BUDGET ERROR:", error);
+    return false;
+  }
+}

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: How to submit weekly work (Sprint Packet)
+    about: Use the Weekly Sprint Packet issue template every week (one per team).
+    url: https://github.com/biidhu/BudgetBrain
+  - name: Need help? (What to include)
+    about: When asking for help, include screenshots/logs and links to the Issue/PR.
+    url: https://github.com/biidhu/BudgetBrain

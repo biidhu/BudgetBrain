@@ -1,0 +1,149 @@
+name: Weekly Sprint Packet
+description: One per team per week. This is the official weekly submission.
+title: "Weekly Sprint Packet — Week "
+labels: ["sprint-packet"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## How to use this form (READ)
+        - Create **one** Sprint Packet per team per week.
+        - Keep it updated during the week (not just at the end).
+        - Every student must add **one comment** on the finished Sprint Packet with **2–3 evidence links**.
+        - Your demo should be **simple + repeatable**. Always include a backup plan.
+
+        **Evidence rule:** If it isn't linked, it didn't happen.
+
+        Fill everything in. If you leave sections blank, you are choosing a lower grade.
+
+  - type: markdown
+    attributes:
+      value: |
+        **Team:** BudgetBrain
+        **Week #:**
+        **PM (this week):**
+        **Scribe (this week):**
+
+  - type: input
+    id: demo_link
+    attributes:
+      label: Demo link (live or video)
+      description: Link to a live deployment OR a short demo video. Must be updated each week.
+      placeholder: "https://..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: demo_script
+    attributes:
+      label: Demo script (3 bullets)
+      description: What will you show in 60–120 seconds? Keep it tight.
+      placeholder: |
+        - Show X (why it matters)
+        - Show Y (new improvement)
+        - Show Z (proof it works)
+    validations:
+      required: true
+
+  - type: textarea
+    id: demo_backup
+    attributes:
+      label: Demo backup plan
+      description: If the live demo fails, what will you show instead? Include links.
+      placeholder: |
+        - Pre-recorded video link:
+        - Screenshots in /docs/images:
+        - Local fallback steps:
+    validations:
+      required: true
+
+  - type: input
+    id: board_link
+    attributes:
+      label: Board / Project link (if you have one)
+      description: Optional, but recommended if you use GitHub Projects.
+      placeholder: "https://github.com/orgs/.../projects/..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: board_snapshot
+    attributes:
+      label: Board snapshot (To Do / Doing / Done)
+      description: Paste a snapshot with owners. This is how we see "who is doing what."
+      placeholder: |
+        **To Do**
+        - [ ] Item — @owner
+
+        **Doing**
+        - [ ] Item — @owner
+
+        **Done**
+        - [x] Item — @owner
+    validations:
+      required: true
+
+  - type: textarea
+    id: definition_of_done
+    attributes:
+      label: Definition of Done (for this week)
+      description: What must be true for something to count as "Done" this week?
+      placeholder: |
+        Example:
+        - Merged to main via PR
+        - Works locally from clean install steps
+        - Basic tests pass / CI passes
+        - Demo flow updated
+    validations:
+      required: true
+
+  - type: textarea
+    id: sprint_notes
+    attributes:
+      label: Sprint notes
+      description: Be honest. "Broke" is not shameful, hiding it is.
+      placeholder: |
+        **Shipped (what improved):**
+        -
+
+        **Broke / Problems:**
+        -
+
+        **Next plan (top 3):**
+        -
+
+        **Risks / Blockers:**
+        -
+    validations:
+      required: true
+
+  - type: textarea
+    id: engineering_spine
+    attributes:
+      label: Engineering practice spine (choose 1) + evidence
+      description: Choose ONE practice focus and prove it with a link (PR/CI/docs). Rotate across weeks.
+      placeholder: |
+        **Focus:** (testing / CI / deployment / logging / security / performance / accessibility / etc.)
+        **Evidence link(s):** (PR / CI run / docs)
+        **Result:** (what improved)
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Individual Contribution Receipts (REQUIRED)
+        Each student must add a comment on this Issue with **2–3 links**, such as:
+        - PR you authored
+        - Issue you closed
+        - Review comment you wrote
+        - CI run you fixed
+        - Docs you updated
+
+        If you don't post receipts, you are choosing a lower individual grade.
+
+        **Team Members:**
+        - @biidhu (Bidhan Pokhrel)
+        - @suakar (Suakar Dahal)
+        - @sunil (Sunil Tamang)
+        - @nima (Nima Sherpa)

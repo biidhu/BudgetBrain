@@ -1,0 +1,70 @@
+name: Retro
+description: Weekly reflection + next actions (team).
+title: "Retro — Week "
+labels: ["retro"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## How to use this form
+        - Do this after your demo (or at the end of the week).
+        - Keep it honest and actionable.
+        - The only unacceptable retro is one with no action items.
+
+  - type: textarea
+    id: wins
+    attributes:
+      label: Wins (what went well)
+      placeholder: |
+        -
+        -
+    validations:
+      required: true
+
+  - type: textarea
+    id: misses
+    attributes:
+      label: Misses (what hurt / slowed us down)
+      placeholder: |
+        -
+        -
+    validations:
+      required: true
+
+  - type: textarea
+    id: keep_stop_start
+    attributes:
+      label: Keep / Stop / Start
+      placeholder: |
+        **Keep**
+        -
+
+        **Stop**
+        -
+
+        **Start**
+        -
+    validations:
+      required: true
+
+  - type: textarea
+    id: action_items
+    attributes:
+      label: Action items (owners + deadlines)
+      description: Every retro must produce 1–3 concrete actions with owners.
+      placeholder: |
+        - [ ] Action — @owner — by (date)
+        - [ ] Action — @owner — by (date)
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence links (optional)
+      placeholder: |
+        - Sprint Packet:
+        - Key PRs:
+        - Demo:
+    validations:
+      required: false
